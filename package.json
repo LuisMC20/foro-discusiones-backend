@@ -1,0 +1,35 @@
+{
+  "name": "crmforo",
+  "version": "1.0.0",
+  "description": "Foro de discusiones",
+  "main": "index.js",
+  "scripts": {
+    "start": "node .",
+    "dev": "nodemon ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LuisMC20/PROYECTO-GESTION-DE-SISTEMAS.git"
+  },
+  "author": "Luis & Fabio",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LuisMC20/PROYECTO-GESTION-DE-SISTEMAS/issues"
+  },
+  "homepage": "https://github.com/LuisMC20/PROYECTO-GESTION-DE-SISTEMAS#readme",
+  "dependencies": {
+    "@google-cloud/storage": "^7.11.0",
+    "apollo-server": "^3.13.0",
+    "apollo-server-express": "^3.13.0",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^6.10.0",
+    "multer": "^1.4.5-lts.1",
+    "node-cron": "^3.0.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}
