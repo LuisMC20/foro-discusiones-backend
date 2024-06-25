@@ -104,7 +104,7 @@ app.post('/upload', upload.single('file'), async (req, res) => {
 async function startServer() {
   try {
     await server.start();
-    server.applyMiddleware({ app, path: '/graphql' });
+    server.applyMiddleware({ app, path: '/graphql', cors: false }); // Disable Apollo's internal CORS handling
 
     const PORT = process.env.PORT || 4000;
 
