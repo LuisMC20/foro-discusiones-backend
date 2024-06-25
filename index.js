@@ -55,7 +55,7 @@ const server = new ApolloServer({
     return { usuario };
   },
   introspection: true,
-  playground: true, // Asegúrate de que está habilitado
+  playground: true
 });
 
 // Ruta para la subida de archivos
@@ -85,7 +85,7 @@ async function startServer() {
     const PORT = process.env.PORT || 4000;
 
     app.listen(PORT, () => {
-      console.log(`Server is running on https://foro-discusiones-backend.onrender.com${server.graphqlPath}`);
+      console.log(`Server is running on http://localhost:${PORT}${server.graphqlPath}`);
     });
 
     // Configura el cron job para ejecutar cada día a medianoche
