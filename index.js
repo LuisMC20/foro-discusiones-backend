@@ -23,14 +23,22 @@ const app = express();
 app.use(express.json());
 
 // Configurar CORS para permitir solicitudes desde tu frontend en Vercel y Apollo Studio
+const allowedOrigins = [
+  'https://foro-discusion.vercel.app', // Tu frontend en Vercel
+  'https://studio.apollographql.com', // Apollo Studio
+  'https://foro-discusion-o2uwlrxkv-luis-medinas-projects-c8575d9b.vercel.app' // Nuevo dominio específico de Vercel
+];
+
 const corsOptions = {
   origin: function (origin, callback) {
+    console.log("Origin: ", origin); // Logging adicional
     if (!origin) return callback(null, true);
-    if (origin.endsWith('.vercel.app') || origin === 'https://studio.apollographql.com') {
+    if (allowedOrigins.indexOf(origin) !== -1) {
       return callback(null, true);
+    } else {
+      const msg = `The CORS policy for this site does not allow access from the specified Origin: ${origin}`;
+      return callback(new Error(msg), false);
     }
-    const msg = `The CORS policy for this site does not allow access from the specified Origin.`;
-    return callback(new Error(msg), false);
   },
   credentials: true, // Permitir cookies y encabezados de autenticación
   optionsSuccessStatus: 200,
