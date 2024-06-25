@@ -26,6 +26,7 @@ app.use(express.json());
 const corsOptions = {
   origin: 'https://foro-discusion.vercel.app', // Reemplaza con tu dominio de Vercel
   optionsSuccessStatus: 200,
+  credentials: true, // Permitir cookies y encabezados de autenticación
 };
 app.use(cors(corsOptions));
 
