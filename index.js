@@ -33,7 +33,7 @@ app.use((req, res, next) => {
   if (allowedOrigins.includes(origin)) {
     res.setHeader('Access-Control-Allow-Origin', origin);
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type,Authorization');
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With, content-type, Authorization');
     res.setHeader('Access-Control-Allow-Credentials', true);
   } else {
     console.error(`The CORS policy for this site does not allow access from the specified Origin: ${origin}`);
@@ -96,7 +96,7 @@ app.post('/upload', upload.single('file'), async (req, res) => {
 async function startServer() {
   try {
     await server.start();
-    server.applyMiddleware({ app, path: '/graphql' });
+    server.applyMiddleware({ app, path: '/graphql', cors: false }); // Deshabilitar el manejo interno de CORS de Apollo Server
 
     const PORT = process.env.PORT || 4000;
 
