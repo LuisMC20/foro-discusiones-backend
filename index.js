@@ -11,8 +11,7 @@ const cron = require('node-cron');
 require('dotenv').config();
 const mongoose = require('mongoose');
 
-// Configurar Mongoose strictQuery
-mongoose.set('strictQuery', true);
+
 
 // Conectar a la base de datos
 conectarDB();
