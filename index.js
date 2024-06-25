@@ -11,7 +11,8 @@ const cron = require('node-cron');
 require('dotenv').config();
 const mongoose = require('mongoose');
 
-
+// Configurar Mongoose strictQuery
+mongoose.set('strictQuery', true);
 
 // Conectar a la base de datos
 conectarDB();
@@ -54,7 +55,7 @@ const server = new ApolloServer({
     return { usuario };
   },
   introspection: true,
-  playground: true
+  playground: true, // Asegúrate de que está habilitado
 });
 
 // Ruta para la subida de archivos
@@ -79,7 +80,7 @@ app.post('/upload', upload.single('file'), async (req, res) => {
 async function startServer() {
   try {
     await server.start();
-    server.applyMiddleware({ app });
+    server.applyMiddleware({ app, path: '/graphql' }); // Asegúrate de que el path está correcto
 
     const PORT = process.env.PORT || 4000;
 
