@@ -39,7 +39,6 @@ const corsOptions = {
       return callback(new Error(msg), false);
     }
   },
-  credentials: true, // Permitir cookies y encabezados de autenticación
   optionsSuccessStatus: 200,
 };
 
