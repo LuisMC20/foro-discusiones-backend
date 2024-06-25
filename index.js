@@ -4,7 +4,6 @@ const typeDefs = require('./db/schema');
 const { resolvers, eliminarAnunciosCaducados } = require('./db/resolvers');
 const conectarDB = require('./config/db');
 const jwt = require('jsonwebtoken');
-const cors = require('cors');
 const { upload } = require('./db/upload');
 const { uploadFileToGCS } = require('./db/upload');
 const cron = require('node-cron');
@@ -22,32 +21,25 @@ const app = express();
 // Middleware para parsear el cuerpo de las solicitudes
 app.use(express.json());
 
-// Configurar CORS para permitir solicitudes desde tu frontend en Vercel y Apollo Studio
-const allowedOrigins = [
-  'https://foro-discusion.vercel.app', // Tu frontend en Vercel
-  'https://studio.apollographql.com', // Apollo Studio
-  'https://foro-discusion-o2uwlrxkv-luis-medinas-projects-c8575d9b.vercel.app', // Nuevo dominio específico de Vercel
-  'https://foro-discusion-bbsikd3yn-luis-medinas-projects-c8575d9b.vercel.app' // Añadir este dominio
-];
-
-const corsOptions = {
-  origin: function (origin, callback) {
-    console.log("Origin: ", origin); // Logging adicional
-    if (!origin) return callback(null, true);
-    if (allowedOrigins.indexOf(origin) !== -1) {
-      console.log(`Allowed Origin: ${origin}`);
-      return callback(null, true);
-    } else {
-      const msg = `The CORS policy for this site does not allow access from the specified Origin: ${origin}`;
-      console.error(msg);
-      return callback(new Error(msg), false);
-    }
-  },
-  credentials: true, // Permitir cookies y encabezados de autenticación
-  optionsSuccessStatus: 200,
-};
-
-app.use(cors(corsOptions));
+// Middleware personalizado para manejar CORS
+app.use((req, res, next) => {
+  const allowedOrigins = [
+    'https://foro-discusion.vercel.app',
+    'https://studio.apollographql.com',
+    'https://foro-discusion-o2uwlrxkv-luis-medinas-projects-c8575d9b.vercel.app',
+    'https://foro-discusion-bbsikd3yn-luis-medinas-projects-c8575d9b.vercel.app'
+  ];
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type,Authorization');
+    res.setHeader('Access-Control-Allow-Credentials', true);
+  } else {
+    console.error(`The CORS policy for this site does not allow access from the specified Origin: ${origin}`);
+  }
+  next();
+});
 
 // Función para obtener el usuario del token JWT
 const getUser = (token) => {
@@ -79,7 +71,7 @@ const server = new ApolloServer({
   formatError: (err) => {
     console.error(err);
     return err;
-  },
+  }
 });
 
 // Ruta para la subida de archivos
@@ -104,7 +96,7 @@ app.post('/upload', upload.single('file'), async (req, res) => {
 async function startServer() {
   try {
     await server.start();
-    server.applyMiddleware({ app, path: '/graphql', cors: false }); // Disable Apollo's internal CORS handling
+    server.applyMiddleware({ app, path: '/graphql' });
 
     const PORT = process.env.PORT || 4000;
 
