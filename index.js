@@ -22,12 +22,27 @@ const app = express();
 // Middleware para parsear el cuerpo de las solicitudes
 app.use(express.json());
 
-// Configurar CORS para permitir solicitudes desde tu frontend en Vercel
+// Configurar CORS para permitir solicitudes desde tu frontend en Vercel y Apollo Studio
+const allowedOrigins = [
+  'https://foro-discusion.vercel.app', // Tu frontend en Vercel
+  'https://studio.apollographql.com', // Apollo Studio
+];
+
 const corsOptions = {
-  origin: 'https://foro-discusion.vercel.app', // Especifica tu dominio de Vercel
-  optionsSuccessStatus: 200,
+  origin: function (origin, callback) {
+    // Permitir solicitudes sin origen (como herramientas locales)
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg = `The CORS policy for this site does not allow access from the specified Origin.`;
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
   credentials: true, // Permitir cookies y encabezados de autenticación
+  optionsSuccessStatus: 200,
 };
+
 app.use(cors(corsOptions));
 
 // Función para obtener el usuario del token JWT
