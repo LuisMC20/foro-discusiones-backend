@@ -34,9 +34,11 @@ const corsOptions = {
     console.log("Origin: ", origin); // Logging adicional
     if (!origin) return callback(null, true);
     if (allowedOrigins.indexOf(origin) !== -1) {
+      console.log(`Allowed Origin: ${origin}`);
       return callback(null, true);
     } else {
       const msg = `The CORS policy for this site does not allow access from the specified Origin: ${origin}`;
+      console.error(msg);
       return callback(new Error(msg), false);
     }
   },
