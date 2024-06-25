@@ -24,7 +24,7 @@ app.use(express.json());
 
 // Configurar CORS para permitir solicitudes desde tu frontend en Vercel
 const corsOptions = {
-  origin: 'foro-discusion.vercel.app', // Reemplaza con tu dominio de Vercel
+  origin: 'https://foro-discusion.vercel.app', // Reemplaza con tu dominio de Vercel
   optionsSuccessStatus: 200,
 };
 app.use(cors(corsOptions));
@@ -80,7 +80,7 @@ app.post('/upload', upload.single('file'), async (req, res) => {
 async function startServer() {
   try {
     await server.start();
-    server.applyMiddleware({ app, path: '/graphql' }); // Asegúrate de que el path está correcto
+    server.applyMiddleware({ app });
 
     const PORT = process.env.PORT || 4000;
 
