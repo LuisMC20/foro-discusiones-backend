@@ -57,6 +57,10 @@ const server = new ApolloServer({
   },
   introspection: true,
   playground: true, // Asegúrate de que está habilitado
+  formatError: (err) => {
+    console.error(err);
+    return err;
+  },
 });
 
 // Ruta para la subida de archivos
