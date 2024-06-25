@@ -26,13 +26,12 @@ app.use(express.json());
 const allowedOrigins = [
   'https://foro-discusion.vercel.app', // Tu frontend en Vercel
   'https://studio.apollographql.com', // Apollo Studio
+  'https://foro-discusion-o2uwlrxkv-luis-medinas-projects-c8575d9b.vercel.app' // Nuevo dominio específico de Vercel
 ];
 
 const corsOptions = {
   origin: function (origin, callback) {
-    // Permitir solicitudes sin origen (como herramientas locales)
     if (!origin) return callback(null, true);
-
     if (allowedOrigins.indexOf(origin) === -1) {
       const msg = `The CORS policy for this site does not allow access from the specified Origin.`;
       return callback(new Error(msg), false);
@@ -71,7 +70,7 @@ const server = new ApolloServer({
     return { usuario };
   },
   introspection: true,
-  playground: true, // Asegúrate de que está habilitado
+  playground: true,
   formatError: (err) => {
     console.error(err);
     return err;
@@ -100,7 +99,7 @@ app.post('/upload', upload.single('file'), async (req, res) => {
 async function startServer() {
   try {
     await server.start();
-    server.applyMiddleware({ app, path: '/graphql' }); // Asegúrate de que el path está correcto
+    server.applyMiddleware({ app, path: '/graphql' });
 
     const PORT = process.env.PORT || 4000;
 
@@ -108,7 +107,6 @@ async function startServer() {
       console.log(`Server is running on https://foro-discusiones-backend.onrender.com${server.graphqlPath}`);
     });
 
-    // Configura el cron job para ejecutar cada día a medianoche
     cron.schedule('0 0 * * *', async () => {
       await eliminarAnunciosCaducados();
     });
