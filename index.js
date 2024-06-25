@@ -80,7 +80,7 @@ app.post('/upload', upload.single('file'), async (req, res) => {
 async function startServer() {
   try {
     await server.start();
-    server.applyMiddleware({ app });
+    server.applyMiddleware({ app, path: '/graphql' }); // Asegúrate de que el path está correcto
 
     const PORT = process.env.PORT || 4000;
 
