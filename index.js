@@ -24,7 +24,7 @@ app.use(express.json());
 
 // Configurar CORS para permitir solicitudes desde tu frontend en Vercel
 const corsOptions = {
-  origin: 'https://your-frontend.vercel.app', // Reemplaza con tu dominio de Vercel
+  origin: 'https://foro-discusion-1hg61jlqn-luis-medinas-projects-c8575d9b.vercel.app', // Reemplaza con tu dominio de Vercel
   optionsSuccessStatus: 200,
 };
 app.use(cors(corsOptions));
