@@ -9,6 +9,10 @@ const { upload } = require('./db/upload');
 const { uploadFileToGCS } = require('./db/upload');
 const cron = require('node-cron');
 require('dotenv').config();
+const mongoose = require('mongoose');
+
+// Configurar Mongoose strictQuery
+mongoose.set('strictQuery', true);
 
 // Conectar a la base de datos
 conectarDB();
@@ -18,8 +22,12 @@ const app = express();
 // Middleware para parsear el cuerpo de las solicitudes
 app.use(express.json());
 
-// Configurar CORS
-app.use(cors());
+// Configurar CORS para permitir solicitudes desde tu frontend en Vercel
+const corsOptions = {
+  origin: 'https://your-frontend.vercel.app', // Reemplaza con tu dominio de Vercel
+  optionsSuccessStatus: 200,
+};
+app.use(cors(corsOptions));
 
 // Función para obtener el usuario del token JWT
 const getUser = (token) => {
@@ -47,7 +55,7 @@ const server = new ApolloServer({
     return { usuario };
   },
   introspection: true,
-  playground: true
+  playground: true, // Asegúrate de que está habilitado
 });
 
 // Ruta para la subida de archivos
@@ -77,7 +85,7 @@ async function startServer() {
     const PORT = process.env.PORT || 4000;
 
     app.listen(PORT, () => {
-      console.log(`Server is running on http://localhost:${PORT}${server.graphqlPath}`);
+      console.log(`Server is running on https://foro-discusiones-backend.onrender.com${server.graphqlPath}`);
     });
 
     // Configura el cron job para ejecutar cada día a medianoche
