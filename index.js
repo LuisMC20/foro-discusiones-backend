@@ -26,7 +26,8 @@ app.use(express.json());
 const allowedOrigins = [
   'https://foro-discusion.vercel.app', // Tu frontend en Vercel
   'https://studio.apollographql.com', // Apollo Studio
-  'https://foro-discusion-o2uwlrxkv-luis-medinas-projects-c8575d9b.vercel.app' // Nuevo dominio específico de Vercel
+  'https://foro-discusion-o2uwlrxkv-luis-medinas-projects-c8575d9b.vercel.app', // Nuevo dominio específico de Vercel
+  'https://foro-discusion-bbsikd3yn-luis-medinas-projects-c8575d9b.vercel.app' // Añadir este dominio
 ];
 
 const corsOptions = {
