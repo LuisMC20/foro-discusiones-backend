@@ -22,9 +22,9 @@ const app = express();
 // Middleware para parsear el cuerpo de las solicitudes
 app.use(express.json());
 
-// Configurar CORS para permitir solicitudes desde cualquier origen
+// Configurar CORS para permitir solicitudes desde tu frontend en Vercel
 const corsOptions = {
-  origin: '*', // Permitir solicitudes desde cualquier origen
+  origin: 'https://foro-discusion.vercel.app', // Especifica tu dominio de Vercel
   optionsSuccessStatus: 200,
   credentials: true, // Permitir cookies y encabezados de autenticación
 };
