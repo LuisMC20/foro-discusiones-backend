@@ -101,7 +101,7 @@ async function startServer() {
     const PORT = process.env.PORT || 4000;
 
     app.listen(PORT, () => {
-      console.log(`Server is running on https://foro-discusiones-backend.onrender.com${server.graphqlPath}`);
+      console.log(`Servidor corriendo en https://foro-discusiones-backend.onrender.com${server.graphqlPath}`);
     });
 
     cron.schedule('0 0 * * *', async () => {
