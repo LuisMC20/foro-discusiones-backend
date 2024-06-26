@@ -9,6 +9,7 @@ const { uploadFileToGCS } = require('./db/upload');
 const cron = require('node-cron');
 require('dotenv').config();
 const mongoose = require('mongoose');
+const cors = require('cors');
 
 // Configurar Mongoose strictQuery
 mongoose.set('strictQuery', true);
@@ -21,24 +22,25 @@ const app = express();
 // Middleware para parsear el cuerpo de las solicitudes
 app.use(express.json());
 
-// Middleware personalizado para manejar CORS
-app.use((req, res, next) => {
-  const allowedOrigins = [
-    'https://foro-discusion.vercel.app',
-    'https://studio.apollographql.com',
-    'https://foro-de-discusion.vercel.app'
-  ];
-  const origin = req.headers.origin;
-  if (allowedOrigins.includes(origin)) {
-    res.setHeader('Access-Control-Allow-Origin', origin);
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type,Authorization');
-    res.setHeader('Access-Control-Allow-Credentials', true);
-  } else {
-    console.error(`The CORS policy for this site does not allow access from the specified Origin: ${origin}`);
-  }
-  next();
-});
+// Middleware CORS para permitir orígenes específicos
+const allowedOrigins = [
+  'https://foro-discusion.vercel.app',
+  'https://studio.apollographql.com',
+  'https://foro-de-discusion.vercel.app'
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    // Permitir solicitudes sin origen (como las hechas desde curl)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg = `The CORS policy for this site does not allow access from the specified Origin: ${origin}`;
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
+  credentials: true
+}));
 
 // Función para obtener el usuario del token JWT
 const getUser = (token) => {
