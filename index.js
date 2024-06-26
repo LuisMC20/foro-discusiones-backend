@@ -10,6 +10,7 @@ const cron = require('node-cron');
 require('dotenv').config();
 const mongoose = require('mongoose');
 const cors = require('cors');
+const { InMemoryLRUCache } = require('apollo-server-caching');
 
 // Configurar Mongoose strictQuery
 mongoose.set('strictQuery', true);
@@ -22,7 +23,7 @@ const app = express();
 // Middleware para parsear el cuerpo de las solicitudes
 app.use(express.json());
 
-// Middleware CORS para permitir orígenes específicos
+// Configuración de CORS para permitir orígenes específicos
 const allowedOrigins = [
   'https://foro-discusion.vercel.app',
   'https://studio.apollographql.com',
@@ -31,7 +32,7 @@ const allowedOrigins = [
 
 app.use(cors({
   origin: function (origin, callback) {
-    if (!origin) return callback(null, true);
+    if (!origin) return callback(null, true); // Permitir solicitudes sin origen (como las hechas desde curl)
     if (allowedOrigins.indexOf(origin) === -1) {
       const msg = `The CORS policy for this site does not allow access from the specified Origin: ${origin}`;
       return callback(new Error(msg), false);
@@ -70,7 +71,9 @@ const server = new ApolloServer({
     console.error(err);
     return err;
   },
-  persistedQueries: false
+  persistedQueries: {
+    cache: new InMemoryLRUCache({ maxSize: 1000 }) // Ajusta el tamaño del caché según sea necesario
+  }
 });
 
 // Ruta para la subida de archivos
@@ -92,7 +95,7 @@ app.post('/upload', upload.single('file'), async (req, res) => {
 async function startServer() {
   try {
     await server.start();
-    server.applyMiddleware({ app, path: '/graphql' });
+    server.applyMiddleware({ app, path: '/graphql', cors: false }); // Deshabilitar CORS para Apollo Server
 
     const PORT = process.env.PORT || 4000;
 
