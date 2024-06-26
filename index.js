@@ -31,7 +31,6 @@ const allowedOrigins = [
 
 app.use(cors({
   origin: function (origin, callback) {
-    // Permitir solicitudes sin origen (como las hechas desde curl)
     if (!origin) return callback(null, true);
     if (allowedOrigins.indexOf(origin) === -1) {
       const msg = `The CORS policy for this site does not allow access from the specified Origin: ${origin}`;
@@ -47,7 +46,6 @@ const getUser = (token) => {
   try {
     if (token) {
       const usuario = jwt.verify(token.replace('Bearer ', ''), process.env.SECRETA);
-      console.log('Usuario autenticado:', usuario);
       return usuario;
     }
     return null;
@@ -64,7 +62,6 @@ const server = new ApolloServer({
   context: ({ req }) => {
     const token = req.headers.authorization || '';
     const usuario = getUser(token);
-    console.log('Contexto del servidor Apollo:', { usuario });
     return { usuario };
   },
   introspection: true,
@@ -72,20 +69,18 @@ const server = new ApolloServer({
   formatError: (err) => {
     console.error(err);
     return err;
-  }
+  },
+  persistedQueries: false
 });
 
 // Ruta para la subida de archivos
 app.post('/upload', upload.single('file'), async (req, res) => {
   try {
-    console.log('Archivo recibido para subir:', req.file);
     const file = req.file;
     if (!file) {
-      console.error('No se recibió ningún archivo.');
       return res.status(400).send('No se recibió ningún archivo.');
     }
     const publicUrl = await uploadFileToGCS(file);
-    console.log('Archivo subido a GCS:', publicUrl);
     res.status(200).json({ fileUrl: publicUrl });
   } catch (error) {
     console.error('Error al subir el archivo:', error);
