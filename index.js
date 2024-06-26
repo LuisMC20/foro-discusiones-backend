@@ -26,8 +26,7 @@ app.use((req, res, next) => {
   const allowedOrigins = [
     'https://foro-discusion.vercel.app',
     'https://studio.apollographql.com',
-    'https://foro-de-discusion.vercel.app',
-    '*'
+    'https://foro-de-discusion.vercel.app'
   ];
   const origin = req.headers.origin;
   if (allowedOrigins.includes(origin)) {
