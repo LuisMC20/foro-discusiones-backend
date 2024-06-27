@@ -1,10 +1,11 @@
 const { Storage } = require('@google-cloud/storage');
 const multer = require('multer');
 const path = require('path');
+require('dotenv').config();
 
 const storage = new Storage({
   projectId: process.env.PROJECT_ID,
-  keyFilename: process.env.KEYFILENAME,
+  keyFilename: process.env.GOOGLE_CLOUD_KEYFILE_JSON,
 });
 
 const bucket = storage.bucket(process.env.BUCKET_NAME);
