@@ -2,8 +2,8 @@ const { Storage } = require('@google-cloud/storage');
 require('dotenv').config();
 
 const storage = new Storage({
-    projectId: process.env.PROJECT_ID,
-    keyFilename: process.env.KEYFILENAME
+  projectId: process.env.PROJECT_ID,
+  keyFilename: process.env.GOOGLE_CLOUD_KEYFILE_JSON,
 });
 
 const bucketName = process.env.BUCKET_NAME;
