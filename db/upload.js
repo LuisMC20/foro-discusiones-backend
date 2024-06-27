@@ -3,9 +3,12 @@ const multer = require('multer');
 const path = require('path');
 require('dotenv').config();
 
+// Parsear las credenciales de la variable de entorno JSON
+const keyfileContent = JSON.parse(process.env.GOOGLE_CLOUD_KEYFILE_JSON);
+
 const storage = new Storage({
   projectId: process.env.PROJECT_ID,
-  keyFilename: process.env.GOOGLE_CLOUD_KEYFILE_JSON,
+  credentials: keyfileContent,
 });
 
 const bucket = storage.bucket(process.env.BUCKET_NAME);
